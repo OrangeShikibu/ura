@@ -38,8 +38,9 @@ class Scopus:
                     scpsfiles.append(os.path.join(curDir, file))
 
         df = []
-        for file in scpsfiles:
-            tmpdf = pd.read_csv(file)
+        for filen in scpsfiles:
+            print(filen)
+            tmpdf = pd.read_csv(filen)
             df.append(tmpdf)
 
         scpsdf = pd.concat(df, ignore_index=True, sort=False)
