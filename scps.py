@@ -7,15 +7,20 @@ from researchcapability import Scopus
 home = os.environ["HOME"]
 # データディレクトリのpathを設定
 data = "/data/scopus/20220608/"
-data1 = "/data/scopus/20220608/2021"
-data2 = "/data/scopus/20220608/2022"
+
 
 scps = Scopus()
 
 # scopusデータの読み込み
-df1 = scps.mkDataFrame(home + data1)
-df2 = scps.mkDataFrame(home + data2)
-df = pd.concat([df1, df2])
+df = scps.mkDataFrame(home + data)
+
+## 以下は、GIMRT年次報告書作成時に設定したもの。
+## IMR分析の際は、コメントしたまま
+# data1 = "/data/scopus/20220608/2021"
+# data2 = "/data/scopus/20220608/2022"
+# df1 = scps.mkDataFrame(home + data1)
+# df2 = scps.mkDataFrame(home + data2)
+# df = pd.concat([df1, df2])
 
 # ===============================================================
 # 部局名辞書の読み込み
@@ -84,6 +89,6 @@ df_imr = pd.concat([df_imr1, df_imr2])
 df_imr = df_imr.drop_duplicates()
 
 df_imr
-df_imr.to_excel(home + "/Desktop/imr20212022.xlsx")
+df_imr.to_excel(home + "/Desktop/imr20162022.xlsx")
 
 df_imr.pivot_table(values="EID", columns=["文献タイプ"], index=["出版年"], aggfunc=len)
