@@ -8,7 +8,6 @@ home = os.environ["HOME"]
 # データディレクトリのpathを設定
 data = "/data/scopus/20220608/"
 
-
 scps = Scopus()
 
 # scopusデータの読み込み
@@ -63,13 +62,14 @@ tunames = "|".join(tulist)
 # 金属材料研究所研究者のデータファイル
 imrresearchers = home + "/data/IMR/IMR_Researchers/IMR_researchers_20220415.xlsx"
 df_imr_researcher = pd.read_excel(imrresearchers)
+
 scpsid = []
-for i in df_imr_researcher["Scopus_AuthorID"][
-    df_imr_researcher["Scopus_AuthorID"] != "unknown"
-]:
+for i in df_imr_researcher["Scopus_AuthorID"]:
     i = str(i)
-    i = ";" + i + ";"
-    scpsid.append(i)
+    if i != "unkown":
+        i = ";" + i + ";"
+        scpsid.append(i)
+
 scpsids = "|".join(scpsid)
 
 # 金属材料研究所　部局名辞書より抽出
