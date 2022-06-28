@@ -1,3 +1,4 @@
+# 東北大学部局評価用　Scopus文献リスト作成
 import pandas as pd
 import os
 
@@ -80,10 +81,12 @@ df_imr2
 df_imr = pd.concat([df_imr1, df_imr2])
 df_imr = df_imr.drop_duplicates()
 df_imr.to_excel(home + "/result/scps_imr_20220627.xlsx")
+df_imr2.to_excel(home + "/result/scps_imr2_20220627.xlsx")
 
 df_imr.pivot_table(values="EID", columns=["文献タイプ"], index=["出版年"], aggfunc=len)
 
-
+# 以下は辞書更新作業用エクセルファイル作成
+"""
 df_chk.to_excel(home + "/result/scps_chk_20220627.xlsx")
 chks = []
 for i in df_chk["著者 + 所属機関"]:
@@ -117,3 +120,4 @@ for i in chks1:
 chks2 = sorted(set(chks2))
 dft = pd.DataFrame(chks2)
 dft.to_excel(home + "/Desktop/chk.xlsx")
+"""
