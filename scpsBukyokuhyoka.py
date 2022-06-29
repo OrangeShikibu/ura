@@ -86,38 +86,39 @@ df_imr2.to_excel(home + "/result/scps_imr2_20220627.xlsx")
 df_imr.pivot_table(values="EID", columns=["文献タイプ"], index=["出版年"], aggfunc=len)
 
 # 以下は辞書更新作業用エクセルファイル作成
-"""
-df_chk.to_excel(home + "/result/scps_chk_20220627.xlsx")
-chks = []
-for i in df_chk["著者 + 所属機関"]:
-    if ";" in i:
-        elms = i.split("; ")
-        for j in elms:
-            chks.append(j)
-    else:
-        # print(i)
-        chks.append(i)
-chks = sorted(set(chks))
-
-chks1 = []
-for i in chks:
-    if "Tohoku" in i:
-        elms = i.split("., ")
-        for j in elms:
-            chks1.append(j)
-chks1 = sorted(set(chks1))
-
-chks2 = []
-for i in chks1:
-    if ", Japan," in i:
-        elms = i.split(", Japan, ")
-        for j in elms:
-            if "Tohoku" in j:
-                chks2.append(j)
-    else:
+def chkAffilContents(dataframe):
+    # df_chk.to_excel(home + "/result/scps_chk_20220627.xlsx")
+    df0 = dataframe
+    chks = []
+    for i in df["著者 + 所属機関"]:
+        if ";" in i:
+            elms = i.split("; ")
+            for j in elms:
+                chks.append(j)
+            else:
+                chks.append(i)
+    chks = sorted(set(chks))
+    chks1 = []
+    for i in chks:
         if "Tohoku" in i:
-            chks2.append(i)
-chks2 = sorted(set(chks2))
-dft = pd.DataFrame(chks2)
-dft.to_excel(home + "/Desktop/chk.xlsx")
-"""
+            elms = i.split("., ")
+            for j in elms:
+                chks1.append(j)
+    chks1 = sorted(set(chks1))
+    chks = []
+    for i in chks1:
+        if ", Japan," in i:
+            elms = i.split(", Japan, ")
+            for j in elms:
+                if "Tohoku" in j:
+                    chks.append(j)
+        else:
+            if "Tohoku" in i:
+                chks.append(i)
+    chks = sorted(set(chks))
+    df1 = pd.DataFrame(chks)
+    return df1
+
+
+dft = chkAffilContents(df_chk)
+# dft.to_excel(home + "/result/chk.xlsx")

@@ -39,7 +39,7 @@ class Scopus:
 
         df = []
         for filen in scpsfiles:
-            print(filen)
+            # print(filen)
             tmpdf = pd.read_csv(filen)
             df.append(tmpdf)
 
