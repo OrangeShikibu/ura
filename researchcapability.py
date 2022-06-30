@@ -125,7 +125,7 @@ class SciVal:
                         pass
                     elif "2-s2.0" in line:
                         line = line[:-1]
-                        # print(line)
+                        print(line)
                         elms = line.split('","')
                         elms[0] = elms[0].replace('"', "")
                         elms[-1] = elms[-1].replace('"', "")
@@ -149,6 +149,79 @@ class SciVal:
                             # break
                             pass
 
+        f.close()
+
+        insertdata = sorted(set(insertdata))
+        df = pd.DataFrame(insertdata, columns=columdata)
+        # print(len(columdata))
+        cc = 0
+        for i in columdata:
+            # print(cc,i)
+            cc += 1
+        return df
+
+    def mkDataFrame2(self, file):
+        self.file = file
+        columdata = []
+        insertdata = []
+        with open(file, "r", encoding="utf-8") as f:
+            chk = 0
+            for line in f:
+                # エルゼビアがScopusデータを更新した日の取得
+                if "Date last updated" in line:
+                    tmp, update = line[:-1].split("\t")
+                    udate = datetime.datetime.strptime(update, "%d %B %Y").strftime(
+                        "%Y/%m/%d"
+                    )
+                    # print(update, udate)
+                    # ハンゼン先生がScopusデータを入手した日の取得
+                if "Date exported" in line:
+                    tmp, exdate = line[:-1].split("\t")
+                    edate = datetime.datetime.strptime(exdate, "%d %B %Y").strftime(
+                        "%Y/%m/%d"
+                    )
+                    # print(exdate, edate)
+                    # 項目名の行を取得
+                if "Scopus Author Ids" in line:
+                    line = line[:-1]
+                    elms = line.split("\t")
+                    for elm in elms:
+                        elm = elm.replace('"', "")
+                        columdata.append(elm)
+                    columdata.append("update")
+                    columdata.append("exdate")
+                    # print(columdata)
+                    chk = 1
+                    # 書誌データの取扱
+                if chk == 0:
+                    pass
+                else:
+                    if "Elsevier B.V. All rights reserved." in line:
+                        pass
+                    elif "2-s2.0" in line:
+                        line = line[:-1]
+                        # print(line)
+                        elms = line.split("\t")
+                        elms[0] = elms[0].replace('"', "")
+                        elms[-1] = elms[-1].replace('"', "")
+
+                        for i in range(len(elms)):
+                            if elms[i] == "-":
+                                elms[i] = ""
+                            if "𝔾a" in elms[i]:
+                                elms[i] = elms[i].replace("𝔾a", "Ga")
+                        elms.append(udate)
+                        elms.append(edate)
+                        tup = tuple(elms)
+                        # insertdata.append(tup)
+                        if len(tup) == 42:
+                            insertdata.append(tup)
+                        else:
+                            # print(tup)
+                            print(len(elms))
+                            insertdata.append(tup)  # test 20200828
+                            # break
+                            pass
         f.close()
 
         insertdata = sorted(set(insertdata))

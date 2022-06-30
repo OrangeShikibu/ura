@@ -3,16 +3,21 @@ import pandas as pd
 import os
 
 from researchcapability import Scopus
+from researchcapability import WoS
 
 # ホームディレクトリのpathを設定
 home = os.environ["HOME"]
 # データディレクトリのpathを設定
 data = "/data/scopus/20220627/"
+dataw = "/data/wos/20220627/"
 
 scps = Scopus()
+wos = WoS()
 
 # scopusデータの読み込み
 df = scps.mkDataFrame(home + data)
+# wosデータの読み込み
+dfw = wos.mkDataFrame(home + dataw)
 
 # ===============================================================
 # 部局名辞書の読み込み
@@ -122,3 +127,5 @@ def chkAffilContents(dataframe):
 
 dft = chkAffilContents(df_chk)
 # dft.to_excel(home + "/result/chk.xlsx")
+
+dfwos = wos.mkDataFrame(home + dataw)
