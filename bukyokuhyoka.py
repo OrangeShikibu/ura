@@ -15,7 +15,7 @@ home = os.environ["HOME"]
 # scopusとwosのデータディレクトリのpathを設定
 datas = "/data/scopus/20220627/"
 dataw = "/data/wos/20220627/"
-datav = "/data/Scival/"
+datav = "/data/scival/20220630/"
 svfile = "Publications_in_IMR_2021_2019_to_2021.csv"
 scps = Scopus()
 wos = WoS()
@@ -28,6 +28,8 @@ df_scps["doi"] = df_scps["DOI"].str.lower()
 df_wos = wos.mkDataFrame(home + dataw)
 df_wos["doi"] = df_wos["DOI"].str.lower()
 df_scival = scival.mkDataFrame(home + datav + svfile)
+df_tudb = pd.read_excel(home + '/data/IMR/2022/論文総説解説記事.xlsx')
+df_tudb["doi"] = df_tudb["DOI"].str.lower()
 # 論文数確認
 df_scps.pivot_table(values="EID", columns=["文献タイプ"], index=["出版年"], aggfunc=len)
 df_wos.pivot_table(
@@ -125,9 +127,7 @@ del df_scps_researcher["chk"]
 # 一旦統合
 df_scps_imr = pd.concat([df_scps_bukyoku, df_scps_researcher])
 notIMR = []
-for i in df_scps_imr["EID"][
-    df_scps_imr["著者 + 所属機関"].str.contains("Advanced, Institute")
-]:
+for i in df_scps_imr["EID"][df_scps_imr["著者 + 所属機関"].str.contains("Advanced, Institute")]:
     notIMR.append(i)
 # 　面倒なものを除いて、データフレームをもう一度作り直す。
 df_scps_imr = df_scps_imr[~df_scps_imr["EID"].isin(notIMR)]
@@ -185,9 +185,7 @@ imr_researcherIDs = sorted(set(imr_researcherIDs))
 imr_researcherIDs.remove("unknown")
 imrresearcherids = "|".join(imr_researcherIDs)
 # ResearcherIDで抽出
-df_wos_imr2 = df_wos_other[
-    df_wos_other["Researcher Ids"].str.contains(imrresearcherids, na=False)
-]
+df_wos_imr2 = df_wos_other[df_wos_other["Researcher Ids"].str.contains(imrresearcherids, na=False)]
 # 著者名で抽出
 # 名前の大文字・小文字調整
 namelist = []
@@ -201,16 +199,10 @@ for i in namelist:
     i = i + "[^a-z]"
     namelist2.append(i)
 researchernames = "|".join(namelist2)
-df_wos_other2 = df_wos_other[
-    ~df_wos_other["UT (Unique WOS ID)"].isin(df_wos_imr2["UT (Unique WOS ID)"])
-]
-df_wos_imr3tmp = df_wos_other2[
-    df_wos_other2["Author Full Names"].str.contains(researchernames, na=False)
-]
+df_wos_other2 = df_wos_other[~df_wos_other["UT (Unique WOS ID)"].isin(df_wos_imr2["UT (Unique WOS ID)"])]
+df_wos_imr3tmp = df_wos_other2[df_wos_other2["Author Full Names"].str.contains(researchernames, na=False)]
 researchernames2 = "Niinomi, Mitsuo|Sugiyama, Kazumasa|Nakajima, Kazuo|Shimada, Yusuke|Yoshikawa, Akira|Semboshi, Satoshi"
-df_wos_imr3 = df_wos_imr3tmp[
-    df_wos_imr3tmp["Author Full Names"].str.contains(researchernames2, na=False)
-]
+df_wos_imr3 = df_wos_imr3tmp[df_wos_imr3tmp["Author Full Names"].str.contains(researchernames2, na=False)]
 df_wos_imr3.to_excel("/Users/yumoto/Desktop/wos_著者名抽出.xlsx")
 # ### WoSデータフレーム の統合
 df_wos_imr = pd.concat([df_wos_bukyoku, df_wos_imr2, df_wos_imr3])
@@ -262,7 +254,8 @@ for i in df_wos2021["doi"]:
     if len(i) > 3:
         wosdoi.append(i)
     else:
-        print(">>", i, "<<")
+        #print(">>", i, "<<")
+        pass
 len(wosdoi)
 
 # 重複、非重複の状況把握
@@ -277,3 +270,12 @@ df_wosNotScp2021.to_excel(home + "/result/wosNotScps2021.xlsx")
 
 len(df_scpsWos2021)
 len(df_wosScp2021)
+
+######################
+# 東北大学DBデータの処理
+# ScopusやWoSに登録されていない情報を抽出する
+df_tudb_c = df_tudb[~df_tudb["doi"].isin(scpsdoi)]
+df_tudb_c2 = df_tudb_c[~df_tudb_c["doi"].isin(wosdoi)]
+len(df_tudb_c)
+len(df_tudb_c2)
+df_tudb_c2.to_excel(home + "/result/東北大DBデータ確認用.xlsx")

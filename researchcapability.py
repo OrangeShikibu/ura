@@ -125,7 +125,7 @@ class SciVal:
                         pass
                     elif "2-s2.0" in line:
                         line = line[:-1]
-                        print(line)
+                        # print(line)
                         elms = line.split('","')
                         elms[0] = elms[0].replace('"', "")
                         elms[-1] = elms[-1].replace('"', "")
@@ -144,7 +144,7 @@ class SciVal:
                             insertdata.append(tup)
                         else:
                             # print(tup)
-                            print(len(elms))
+                            # print(len(elms))
                             insertdata.append(tup)  # test 20200828
                             # break
                             pass
