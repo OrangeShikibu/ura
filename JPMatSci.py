@@ -60,8 +60,9 @@ tunames = "|".join(tulist)
 # IMR研究者データの読み込み
 ###########################
 # 金研研究者のデータファイル
-imrresearchers = "/data/IMR/IMR_Researchers/IMR_researchers_20220415.xlsx"
+imrresearchers = "/googleMyDrive/data/IMR/IMR_Researchers/IMR_researchers_20220415.xlsx"
 df_imr_researcher = pd.read_excel(home + imrresearchers)
+df_imr_researcher
 # 金研研究者のResearcherID
 imr_researcherIDs = df_imr_researcher["ResearcherID"].values.tolist()
 # 金研研究者の名前
