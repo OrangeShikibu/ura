@@ -30,7 +30,7 @@ df_wos['Addresses']
 # 部局名辞書ファイルの読み込み
 ##########################
 # 現在の部局名辞書ファイル
-dict = "/data/dict/current/dict_TU_Orgs_Name_20220627.xlsx"
+dict = "/googleMyDrive/data/dict/current/dict_TU_Orgs_Name_20220627.xlsx"
 df_dics = pd.read_excel(home + dict)
 # 部局を確認できている部局名辞書のデータフレームを作成する
 abbrevia = []
@@ -209,7 +209,12 @@ for i in names:
     else:
         names1.append(i)
 names1 = sorted(set(names1))
-def cleanchimei(text):
+
+with open(home+'/Desktop/jusyo.txt','r') as f:
+    jusyo = f.readlines()
+
+print(jusyo[0])
+def cleanchimei0(text):
     text = re.sub(', Japan$', ',', text)
     text = re.sub(', \d+,$',',',text)
     text = re.sub(', \w* \d*,$', ',', text)
@@ -226,7 +231,6 @@ def cleanchimei(text):
     text = re.sub(',\s*[A-Z]\w* [Kk]u,$',',',text)
     text = re.sub(',\s*\d+\-\d+\s+[A-Z][a-z]+\s[A-Z][a-z]+,$',',',text)
     text = re.sub(',\s*\d+\-\d+\-\d+\s+[A-Z][a-z]+\s[A-Z][a-z]+,$',',',text)
-
     text = re.sub(',\s+Aizu Wakamatsu,$',',',text)
     text = re.sub(',\s+[A-Z][a-z]+\sCho,$',',',text)
     text = re.sub(', I\-1\-1 Umezono,$',',',text)
@@ -292,18 +296,27 @@ def cleanchimei(text):
 
     return text
 
+def cleanchimei(text,jlist):
+    jlist = jlist
+    text = re.sub(', Japan$', ',', text)
+    for i in jlist:
+        i = re.sub('\n',',$',i)
+        i = ',\s*'+i
+        text = re.sub(i,',',text)
+    return text
+
 japan = []
 overseas = []
 for i in names1:
     if ', Japan' in i:
-        i = cleanchimei(i)
-        i = cleanchimei(i)
+        i = cleanchimei(i,jusyo)
+        i = cleanchimei(i,jusyo)
         japan.append(i)
     else:
         overseas.append(i)
 japan = sorted(set(japan))
 len(japan)
-with open(home+'/Desktop/chk.txt','w') as f:
+with open(home+'/Desktop/chk0711.txt','w') as f:
     for i in japan:
         print(i)
         i=i+'\n'
