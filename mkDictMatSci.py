@@ -102,7 +102,7 @@ for n in range(len(kikanmeiJusyo)):
     if n == 0:
         japan = []
         overseas = []
-    i = names1[n]
+    i = kikanmeiJusyo[n]
     #print(i)
     if ', Japan' in i:
         print(i)
