@@ -25,7 +25,6 @@ df_wos.pivot_table(
     aggfunc=len,
 )
 
-df_wos['Addresses']
 ##########################
 # 部局名辞書ファイルの読み込み
 ##########################
@@ -163,7 +162,6 @@ df_p
 #df_p.to_excel(home + "/result/JPMatSci_imr_pivot_20220708.xlsx")
 
 # 研究機関を分析する
-df_wos.columns
 names0 = []
 for address in df_wos['Addresses']:
     ##address = str(address)
@@ -210,345 +208,58 @@ for i in names:
         names1.append(i)
 names1 = sorted(set(names1))
 
-with open(home+'/Desktop/jusyo.txt','r') as f:
+with open(home+'/googleMyDrive/data/MatSci/jusyo_20220711.txt','r') as f:
     jusyo = f.readlines()
 
-print(jusyo[0])
-def cleanchimei0(text):
-    text = re.sub(', Japan$', ',', text)
-    text = re.sub(', \d+,$',',',text)
-    text = re.sub(', \w* \d*,$', ',', text)
-    text = re.sub(', [A-Z][a-z]+,$',',',text)
-    text = re.sub(',\s*\d+\s+[A-Z][a-z]+,$',',',text)
-    text = re.sub(',\s*\d+\-\d+\s+[A-Z][a-z]+,$',',',text)
-    text = re.sub(',\s*\d+\-\d+\-\d+\s+[A-Z][a-z]+,$',',',text)
-    text = re.sub(',\s*\d+\s+[A-Z][a-z]+\sCho,$',',',text)
-    text = re.sub(',\s*\d+\-\d+\s+[A-Z][a-z]+\sCho,$',',',text)
-    text = re.sub(',\s*\d+\-\d+\-\d+\s+[A-Z][a-z]+\sCho,$',',',text)
-    text = re.sub(',\s+[A-Z][a-z]+\s\d+,$',',',text)
-    text = re.sub(',\s+[A-Z][a-z]+\s\d+\-\d+,$',',',text)
-    text = re.sub(',\s+[A-Z][a-z]+\s\d+\-\d+\-\d+,$',',',text)
-    text = re.sub(',\s*[A-Z]\w* [Kk]u,$',',',text)
-    text = re.sub(',\s*\d+\-\d+\s+[A-Z][a-z]+\s[A-Z][a-z]+,$',',',text)
-    text = re.sub(',\s*\d+\-\d+\-\d+\s+[A-Z][a-z]+\s[A-Z][a-z]+,$',',',text)
-    text = re.sub(',\s+Aizu Wakamatsu,$',',',text)
-    text = re.sub(',\s+[A-Z][a-z]+\sCho,$',',',text)
-    text = re.sub(', I\-1\-1 Umezono,$',',',text)
-    text = re.sub(', 1919\-1 Tancha, Onna Son,$',',',text)
-    text = re.sub(', 1\-1 Marunouchi 3 Chorne,$',',',text)
-    text = re.sub(', 1\-1 Rokkodai Cho,$',',',text)
-    text = re.sub(', 1\-17\-134 Omachi,$',',',text)
-    text = re.sub(', 1\-2\-1 Izumi Cho,$',',',text)
-    text = re.sub(', 1\-297 Wakiyama,$',',',text)
-    text = re.sub(', 1\-32 Machikaneyama,$',',',text)
-    text = re.sub(', 1\-32\-1 Nishifu Machi,$',',',text)
-    text = re.sub(', 1\-7\-1 Hanabatake,$',',',text)
-    text = re.sub(', 11\-1 Mihogaoka,$',',',text)
-    text = re.sub(', 116\-2 Kamedanakanocho,$',',',text)
-    text = re.sub(', 1200 Matsumoto Cho,$',',',text)
-    text = re.sub(', 165 Koen Cho,$',',',text)
-    text = re.sub(', 165 Koencho,$',',',text)
-    text = re.sub(', 2\-1 Hirosawa,$',',',text)
-    text = re.sub(', 2\-1\-1 Katahira,$',',',text)
-    text = re.sub(', 2\-1\-52\-202 Wakaehigashimachi,$',',',text)
-    text = re.sub(', 2\-12\-1 Hisakata,$',',',text)
-    text = re.sub(', 2\-12\-1 Ookayama,$',',',text)
-    text = re.sub(', 2\-15\-11 Serigaya Chou,$',',',text)
-    text = re.sub(', 2\-2 Yamadaoka,$',',',text)
-    text = re.sub(', 2\-20\-9 Tomatsucho,$',',',text)
-    text = re.sub(', 2\-39\-1 Kurokami,$',',',text)
-    text = re.sub(', 2\-6\-1 Nagasaka,$',',',text)
-    text = re.sub(', 2\-610 Uedayama,Tenpaku,$',',',text)
-    text = re.sub(', 205 Kyushu Univ, Int Res Ctr Hydrogen Energy,$',',',text)
-    text = re.sub(', 22\-19 Murakumo Cho,$',',',text)
-    text = re.sub(', 2217\-20 Hayashi Cho,$',',',text)
-    text = re.sub(', 228\-7399 Nakagawa,Hosoe Cho,$',',',text)
-    text = re.sub(', 250 Ryusen Cho,$',',',text)
-    text = re.sub(', 255 Shimo Okubo,$',',',text)
-    text = re.sub(', 27\-1 Rokkakubashi,$',',',text)
-    text = re.sub(', 3\-1 Shinchi,Fuchu Cho,$',',',text)
-    text = re.sub(', 3\-1\-1 Yoshinodai,$',',',text)
-    text = re.sub(', 3\-24\-24 Nakahara,$',',',text)
-    text = re.sub(', 31\-20,$',',',text)
-    text = re.sub(', 3975\-18 Haijima Cho,$',',',text)
-    text = re.sub(', 3D Printing Corp,$',',',text)
-    text = re.sub(', 3DOM Inc,$',',',text)
-    text = re.sub(', 4D Sensor Inc,$',',',text)
-    text = re.sub(', 5\-3\-1 Kojimachi,$',',',text)
-    text = re.sub(', 5000 Hirakuchi,$',',',text)
-    text = re.sub(', 53 Kawahara Cho,Shogoin Sakyo Ku,$',',',text)
-    text = re.sub(', 6 Ehime Univ, Geodynam Res Ctr,$',',',text)
-    text = re.sub(', 6\-6 Aramaki,$',',',text)
-    text = re.sub(', 6\-6\-02 Aramaki Aza Aoba,$',',',text)
-    text = re.sub(', 6\-6\-02Aramaki Aza Aoba,$',',',text)
-    text = re.sub(', 650 Mitsuzawa,Hosaka Cho, Nirasaki City,$',',',text)
-    text = re.sub(', 7\-3\-1 Hongo,$',',',text)
-    text = re.sub(', 713 Shake Aza,$',',',text)
-    text = re.sub(', 744 Motooka,$',',',text)
-    text = re.sub(', 8 Ichiban Cho,$',',',text)
-    text = re.sub(', 8\-3\-5 Nagaura Ekimae Sodegaura,$',',',text)
-    text = re.sub(', 8020 Promot Fdn,$',',',text)
-    text = re.sub(', 866 Nakane,$',',',text)
-    text = re.sub(', 970 Shimoise,Hayashida Cho,$',',',text)
-    text = re.sub(', 1\-36\-2\-3F Shinjuku,$',',',text)
-    text = re.sub(', 1\-1 Gakuen Kibanadai Nishi,$',',',text)
-    text = re.sub(', 1247 Yachigusa,\s*Yakusa Cho,$',',',text)
-
-    return text
 
 def cleanchimei(text,jlist):
     jlist = jlist
     text = re.sub(', Japan$', ',', text)
     for i in jlist:
-        i = re.sub('\n',',$',i)
+        i = re.sub('\n',',',i)
         i = ',\s*'+i
-        text = re.sub(i,',',text)
+        #print(i)
+        #i = ',\s*'+i
+        text = re.sub(i+'$',',',text)
     return text
 
-japan = []
-overseas = []
-for i in names1:
+
+for n in range(len(names1)):
+    if n == 0:
+        japan = []
+        overseas = []
+    i = names1[n]
+    #print(i)
     if ', Japan' in i:
+        print(i)
+        i = cleanchimei(i,jusyo)
+        i = cleanchimei(i,jusyo)
         i = cleanchimei(i,jusyo)
         i = cleanchimei(i,jusyo)
         japan.append(i)
     else:
         overseas.append(i)
+
 japan = sorted(set(japan))
 len(japan)
-with open(home+'/Desktop/chk0711.txt','w') as f:
+
+
+with open(home+'/googleMyDrive/data/MatSci/kikanmeiKokunai0712.txt','w') as f:
     for i in japan:
         print(i)
         i=i+'\n'
         f.write(i)
 f.close()
 
+# Addressが空白となっているもの
 df_chk = df_wos[df_wos['Addresses'].isin(['nan'])]
-df_chk
+df_chk.to_excel(home+'/googleMyDrive/data/MatSci/chkAddNan.xlsx')
 
-
-youso = []
-for i in names1:
-    if re.search(', Japan',i):
-        elms = re.split(',',i)
-        for j in elms:
-            j=j.strip()
-            youso.append(j)
-        #print(i)
-youso = sorted(set(youso))
-
-chkyouso = []
-jusyo = []
-with open(home+'/Desktop/chk.txt','w') as f:
-    chkyouso = []
-    for i in youso:
-        ii = i.lower()
-        if re.search('^japan', ii) or re.search('^nippon',ii) or re.search('^nihon',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search(' univ$',ii) or re.search('^univ ',ii) or re.search(' univ ',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^adv ', ii) or re.search('^dept ', ii) or re.search(' dept$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search(' labs*$', ii) or re.search(' inst$', ii) or re.search(' sci$', ii):
-            pass
-            chkyouso.append(i)
-        elif re.search(' ltd$',ii) or re.search(' inc$', ii) or re.search(' kk$',ii) or re.search('cor*p*', ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^AIST ',i) or re.search('^acad ',ii) or re.search(' ctr*$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('project$', ii) or re.search('hosp$', ii) or re.search('technol$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^appl', ii) or re.search(' engn$', ii) or re.search(' grp$',ii) or re.search(' div$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^ctr [a-z]',ii) or re.search('^div ', ii) or re.search('^fac',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^elect', ii) or re.search('^element', ii) or re.search('^frontiers*',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('team$',ii) or re.search('unit$',ii) or re.search('^global',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^grad ',ii) or re.search('^scha',ii) or re.search(' sch$',ii) :
-            pass
-            chkyouso.append(i)
-        elif re.search('^high',ii) or re.search('res ctr',ii) or re.search('program(me)*$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^ind ',ii) or re.search('^informat',ii) or re.search('^innovat',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^inst\w* ',ii) or re.search('^int\w* ',ii) or re.search(' res$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('daigaku',ii) or re.search('inst tech',ii) or re.search('^lab',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^mat ',ii) or re.search('^math\w* ',ii) or re.search('^micro\w* ',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search(' dent ',ii) or re.search('^minist',ii) or re.search('ind sci res',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('res inst ',ii) or re.search('^nano(\s|m)* ',ii) or re.search('^natl*',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^new\w* ',ii) or re.search('^nucl',ii) or re.search('^open',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^or(al|g) ',ii) or re.search('sect$',ii) or re.search('pit$',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('field$',ii) or re.search('headquar*ters*$',ii) or re.search('^res & (dev|educ|serv)',ii):
-            pass
-            chkyouso.append(i)
-        elif re.search('^sc[hi] ',ii) or re.search('^sect\w* ',ii) or re.search('^tech ',ii):
-            chkyouso.append(i)
-        elif re.search('^technol', ii) or re.search('^unit\w* ',ii) or re.search('^wpi\w* ',ii):
-            chkyouso.append(i)
-        elif re.search('^world',ii) or re.search('PRESTO',i) or re.search(' JST',i) or re.search('agcy$',ii):
-            chkyouso.append(i)
-        elif re.search('Environm(\s|$)',i) or re.search('Hub$',i) or re.search('^alliance',ii):
-            chkyouso.append(i)
-        elif re.search('^assoc', ii) or re.search(' chem$',ii) or re.search(' med$', ii):
-            chkyouso.append(i)
-        elif re.search(' best$',ii) or re.search('^biomed',ii) or re.search('Bioengi*n ', i):
-            chkyouso.append(i)
-        elif re.search('NIMS', i) or re.search('^[A-Z]+$', i) or re.search(' dent$', ii):
-            chkyouso.append(i)
-        elif re.search('cent\w* [a-z]+', ii) or re.search('^(ceram|chem) ',ii) or re.search('inst sci',ii):
-            chkyouso.append(i)
-        elif re.search(' (elect|power|refinery|works)$',ii) or re.search(' mat$',ii) or re.search('^clin',ii):
-            chkyouso.append(i)
-        elif re.search(' AIST(\s|$)',i) or re.search(' dev$',ii) or re.search('^dev',ii) or re.search('^dent',ii):
-            chkyouso.append(i)
-        elif re.search('kaisha',ii) or re.search(' japan$',ii) or re.search(' clin$',ii):
-            chkyouso.append(i)
-        elif re.search('ERATO',i) or re.search('elytmax',ii) or re.search('management$',ii):
-            chkyouso.append(i)
-        elif re.search('^(educ|energy)',ii) or re.search('fac$',ii) or re.search('^environm',ii):
-            chkyouso.append(i)
-        elif re.search('^field',ii) or re.search(' (org|off|stn|syst)$',ii) or re.search('^fdn',ii):
-            chkyouso.append(i)
-        elif re.search(' acad$',ii) or re.search(' ind acad ',ii) or re.search('ctr organ',ii):
-            chkyouso.append(i)
-        elif re.search('renewable',ii) or re.search('^(funct|fus) ',ii) or re.search(' soc$',ii):
-            chkyouso.append(i)
-        elif re.search('GaN ',i) or re.search('G(REEN|reen)',i) or re.search(' assoc$',ii) or re.search('gerodontol',ii):
-            chkyouso.append(i)
-        elif re.search('gen educ',ii) or re.search('^grp',ii) or re.search('interdisciplinary',ii):
-            chkyouso.append(i)
-        elif re.search(' net$',ii) or re.search('^head ',ii) or re.search('radiat ctr',ii):
-            chkyouso.append(i)
-        elif re.search(' ge$',ii) or re.search(' (energy|solut|met)$',ii) or re.search('^human',ii):
-            chkyouso.append(i)
-        elif re.search('hydrogen',ii) or re.search('technol ctr',ii) or re.search('JAXA',i):
-            chkyouso.append(i)
-        elif re.search('IRIDeS',i) or re.search('icc ',ii) or re.search('wpi$',ii):
-            chkyouso.append(i)
-        elif re.search('plant$',ii) or re.search('govt$',ii) or re.search(' bur$',ii):
-            chkyouso.append(i)
-        elif re.search('imaging',ii) or re.search('impact',ii) or re.search('nursing',ii):
-            chkyouso.append(i)
-        elif re.search(' (phys|firm)$',ii) or re.search(' PARC',i) or re.search('spring\s*8',ii):
-            chkyouso.append(i)
-        elif re.search('JA*M*STE*C*',i) or re.search('steel$',ii) or re.search('JSPS',i):
-            chkyouso.append(i)
-        elif re.search('joining',ii) or re.search('(branch|gakuin|design)$',ii):
-            chkyouso.append(i)
-        elif re.search('r&d$',ii) or re.search('CMRC$',i) or re.search('mem lab',ii):
-            chkyouso.append(i)
-        elif re.search('inst ind',ii) or re.search('indistrial tech',ii) or re.search('KPSI',i):
-            chkyouso.append(i)
-        elif re.search('forum$',ii) or re.search('ind ltd',ii) or re.search('open innovat',ii):
-            chkyouso.append(i)
-        elif re.search('appl sci',ii) or re.search('forestry off',ii) or re.search('pharmaceut',ii):
-            chkyouso.append(i)
-        elif re.search('museum$',ii) or re.search('educ$',ii) or re.search('org educ',ii) or re.search('observ',ii):
-            chkyouso.append(i)
-        elif re.search('inst photo',ii) or re.search('(phoen|tec)$',ii) or re.search('(associates|depot)$',ii):
-            chkyouso.append(i)
-        elif re.search(' hosp ',ii) or re.search(' hq$',ii) or re.search('^L[Ii](A|MMS) ',i):
-            chkyouso.append(i)
-        elif re.search('^liberal arts',ii) or re.search('life ',ii) or re.search('^lise',ii):
-            chkyouso.append(i)
-        elif re.search('MaD[Ii]S',i) or re.search('MANA',i) or re.search('Mech',i):
-            chkyouso.append(i)
-        elif re.search('surg$',ii) or re.search('^med ',ii) or re.search('inst adv',ii):
-            chkyouso.append(i)
-        elif re.search('^mfg ',ii) or re.search(' mat ',ii) or re.search('^mol ',ii) or re.search('nanomat ',ii):
-            chkyouso.append(i)
-        elif re.search('platform$',ii) or re.search('NAMA',i) or re.search('nanoquine',ii):
-            chkyouso.append(i)
-        elif re.search('nanosci',ii) or re.search('^(network|neutron|next)',ii) or re.search('res lab',ii):
-            chkyouso.append(i)
-        elif re.search(' (ind|batteri|equipment)$',ii) or re.search('riken ',ii) or re.search('oil$',ii):
-            chkyouso.append(i)
-        elif re.search('^off ',ii) or re.search('creat$',ii) or re.search('factory$',ii):
-            chkyouso.append(i)
-        elif re.search(' fdn$',ii) or re.search('^opt',ii) or re.search('^ortho',ii) or re.search('periodont',ii):
-            chkyouso.append(i)
-        elif re.search('^photon',ii) or re.search('program',ii) or re.search('project',ii) or re.search('Dept \d+$',i):
-            chkyouso.append(i)
-        elif re.search('^(qst|quantum) ',ii) or re.search('qbic$',ii) or re.search('^res ',ii):
-            chkyouso.append(i)
-        elif re.search('promot$',ii) or re.search('res\w*\sctr',ii) or re.search('prosthodont',ii):
-            chkyouso.append(i)
-        elif re.search(' (gk|applicat|operat|fupet|giro|gijuts*u)$',ii) or re.search('RIKEN$',i):
-            chkyouso.append(i)
-        elif re.search('^soken\s*dai',ii) or re.search('^S[PR]ring',i) or re.search('cens*ter',ii):
-            chkyouso.append(i)
-        elif re.search('source$',ii) or re.search('llc$',ii) or re.search('r&d inst',ii) or re.search('polytech$',ii):
-            chkyouso.append(i)
-        elif re.search('prison$',ii) or re.search('^secretariat',ii) or re.search(' med ctr ',ii):
-            chkyouso.append(i)
-        elif re.search('enterprise$',ii) or re.search('PT Kanefusa',i) or re.search('Panasonic',i):
-            chkyouso.append(i)
-        elif re.search('(giken|serv)$',ii) or re.search('Ub*i*n*vers',i) or re.search('techn$',ii):
-            chkyouso.append(i)
-        elif re.search('shop$',ii) or re.search('vehicles$',ii) or re.search('^polytech',ii):
-            chkyouso.append(i)
-        elif re.search('business$',ii) or re.search('^(portfolio|presto|prior org|profitet)',ii):
-            chkyouso.append(i)
-        elif re.search('endodont$',ii) or re.search(' nat$',ii) or re.search('mission',ii):
-            chkyouso.append(i)
-        elif re.search('engn lab',ii) or re.search('^solar frontier',ii) or re.search('(innovat|design) ctr',ii):
-            chkyouso.append(i)
-        elif re.search('strategy$',ii) or re.search('(TEL|tagen|TOTO|House|TAISEI)',i):
-            chkyouso.append(i)
-        elif re.search('capacitor',ii) or re.search('k\s*k$',ii) or re.search(' (ink|kogyo|sanso)$',ii):
-            chkyouso.append(i)
-        elif re.search(' team(\s|$)',ii) or re.search('agr forest',ii) or re.search('^tokyo tech',ii):
-            chkyouso.append(i)
-        elif re.search('therapy$',ii) or re.search('alliance$',ii) or re.search('UTokyo',i):
-            chkyouso.append(i)
-        elif re.search('UEC',i) or re.search(' Inc ',i) or re.search('UVSOR',i) or re.search('UnivToyama',i):
-            chkyouso.append(i)
-        elif re.search('^Univ$',i) or re.search('CNER$',i) or re.search('(WOW|WPP)',i):
-            chkyouso.append(i)
-        elif re.search('West Japan',i) or re.search('Logist$',i) or re.search(' Works ',i):
-            chkyouso.append(i)
-        elif re.search('inst earth sci',ii) or re.search('lodge$',ii) or re.search('sangyosya$',ii):
-            chkyouso.append(i)
-        elif re.search('builder$',ii) or re.search('glass$',ii) or re.search('AISTU',i):
-            chkyouso.append(i)
-        #elif re.search('^B',i) or re.search('^\d',i) or re.search('^shakai fukushi',ii):
-            #pass
-        else:
-            f.write(i+'\n')
-            jusyo.append(i)
-f.close()
-
-jusyo = sorted(set(jusyo))
-chkyouso = sorted(set(chkyouso))
-with open(home+'/Desktop/chk2.txt','w') as f:
-    for i in chkyouso:
-        f.write(i+'\n')
+len(overseas)
+oversear = sorted(set(overseas))
+with open(home+'/googleMyDrive/data/MatSci/kikanmeiKaigai0712.txt','w') as f:
+    for i in overseas:
+        print(i)
+        i=i+'\n'
+        f.write(i)
 f.close()
