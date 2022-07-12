@@ -105,7 +105,7 @@ for n in range(len(kikanmeiJusyo)):
     i = kikanmeiJusyo[n]
     #print(i)
     if ', Japan' in i:
-        print(i)
+        #print(i)
         i = cleanchimei(i,jusyo)
         i = cleanchimei(i,jusyo)
         i = cleanchimei(i,jusyo)
@@ -113,6 +113,9 @@ for n in range(len(kikanmeiJusyo)):
         japan.append(i)
     else:
         overseas.append(i)
+    if n>100 and n%500==1:
+        print(n)
+print('処理終了')
 
 # 国内機関名辞書の出力
 japan = sorted(set(japan))
