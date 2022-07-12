@@ -8,14 +8,14 @@ import datetime
 
 # ホームディレクトリのpathを設定
 home = os.environ["HOME"]
-
+home
 #######################
 # 書誌情報データの読み込み
 #######################
 # scopusとwosのデータディレクトリのpathを設定
-datas = "/data/scopus/20220627/"
-dataw = "/data/wos/20220627/"
-datav = "/data/scival/20220630/"
+datas = "/googleMyDrive/data/scopus/20220708/"
+dataw = "/googleMyDrive/data/wos/20220708a/"
+datav = "/googleMyDrive/data/scival/20220630/"
 svfile = "Publications_in_IMR_2021_2019_to_2021.csv"
 scps = Scopus()
 wos = WoS()
@@ -28,7 +28,7 @@ df_scps["doi"] = df_scps["DOI"].str.lower()
 df_wos = wos.mkDataFrame(home + dataw)
 df_wos["doi"] = df_wos["DOI"].str.lower()
 df_scival = scival.mkDataFrame(home + datav + svfile)
-df_tudb = pd.read_excel(home + '/data/IMR/2022/論文総説解説記事.xlsx')
+df_tudb = pd.read_excel(home + '/googleMyDrive/data/IMR/2022/論文総説解説記事.xlsx')
 df_tudb["doi"] = df_tudb["DOI"].str.lower()
 # 論文数確認
 df_scps.pivot_table(values="EID", columns=["文献タイプ"], index=["出版年"], aggfunc=len)
@@ -43,7 +43,7 @@ df_wos.pivot_table(
 # 部局名辞書ファイルの読み込み
 ##########################
 # 現在の部局名辞書ファイル
-dict = "/data/dict/current/dict_TU_Orgs_Name_20220627.xlsx"
+dict = "/googleMyDrive/data/dict/current/dict_TU_Orgs_Name_20220627.xlsx"
 df_dics = pd.read_excel(home + dict)
 # 部局を確認できている部局名辞書のデータフレームを作成する
 abbrevia = []
@@ -73,7 +73,7 @@ tunames = "|".join(tulist)
 # IMR研究者データの読み込み
 ###########################
 # 金研研究者のデータファイル
-imrresearchers = "/data/IMR/IMR_Researchers/IMR_researchers_20220415.xlsx"
+imrresearchers = "/googleMyDrive/data/IMR/IMR_Researchers/IMR_researchers_20220415.xlsx"
 df_imr_researcher = pd.read_excel(home + imrresearchers)
 # 金研研究者のResearcherID
 imr_researcherIDs = df_imr_researcher["ResearcherID"].values.tolist()
@@ -203,7 +203,7 @@ df_wos_other2 = df_wos_other[~df_wos_other["UT (Unique WOS ID)"].isin(df_wos_imr
 df_wos_imr3tmp = df_wos_other2[df_wos_other2["Author Full Names"].str.contains(researchernames, na=False)]
 researchernames2 = "Niinomi, Mitsuo|Sugiyama, Kazumasa|Nakajima, Kazuo|Shimada, Yusuke|Yoshikawa, Akira|Semboshi, Satoshi"
 df_wos_imr3 = df_wos_imr3tmp[df_wos_imr3tmp["Author Full Names"].str.contains(researchernames2, na=False)]
-df_wos_imr3.to_excel("/Users/yumoto/Desktop/wos_著者名抽出.xlsx")
+#df_wos_imr3.to_excel(home + "/Desktop/wos_著者名抽出.xlsx")
 # ### WoSデータフレーム の統合
 df_wos_imr = pd.concat([df_wos_bukyoku, df_wos_imr2, df_wos_imr3])
 df_wos_imr = df_wos_imr.drop_duplicates()
@@ -217,8 +217,8 @@ df_wos_imr.pivot_table(
     index=["Publication Year"],
     aggfunc=len,
 )
-df_scps_imr.to_excel(home + "/result/scps_imr_20220629.xlsx")
-df_wos_imr.to_excel(home + "/result/wos_imr_20220629.xlsx")
+df_scps_imr.to_excel(home + "/result/scps_imr_20220708.xlsx")
+df_wos_imr.to_excel(home + "/result/wos_imr_20220708.xlsx")
 
 # 金属材料研究所論文
 # scopusに掲載されていて、SciValに掲載されていない論文（同じ時期で調べないと意味がない）
@@ -279,3 +279,12 @@ df_tudb_c2 = df_tudb_c[~df_tudb_c["doi"].isin(wosdoi)]
 len(df_tudb_c)
 len(df_tudb_c2)
 df_tudb_c2.to_excel(home + "/result/東北大DBデータ確認用.xlsx")
+
+df_scps2021['EID']
+
+# 総長・プロボスト室提供データ
+df_kk = pd.read_excel(home+'/googleMyDrive/data/IMR/TUHyoka/16_IMR_papers.xlsx')
+df_kk_chk = df_kk[~df_kk['EID'].isin(df_scps2021['EID'])]
+df_kk_chk.to_excel(home + '/Desktop/部局評価確認用11.xlsx')
+df_scps_chk = df_scps2021[~df_scps2021['EID'].isin(df_kk['EID'])]
+df_scps_chk.to_excel(home+'/Desktop/部局評価確認用22.xlsx')
