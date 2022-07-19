@@ -215,107 +215,23 @@ df_wos_imr.to_excel(home + "/result/JPMatSci_imr_20220708.xlsx")
 df_p.to_excel(home + "/result/JPMatSci_imr_pivot_20220708.xlsx")
 
 
-###################################################
-## 辞書作成
-# 研究機関を分析する
-names0 = []
-for address in df_wos['Addresses']:
-    ##address = str(address)
-    if "; [" in address:
-        address = address.replace("; [","; [[")
-        pass
-        elms = address.split("; [")
-        for j in elms:
-            names0.append(j)
-    elif "nan" in address:
-        pass
-    else:
-        names0.append(address)
-names0 = sorted(set(names0))
-len(names0)
 
-names = []
-for i in names0:
-    if "] " in i:
-        pass
-        elms = i.split('] ')
-        if len(elms) > 2:
-            print(elms)
-        else:
-            #print(elms[1])
-            names.append(elms[1])
+# 分析
+# 著者分析
+rlist = []
+for i in df_wos_imr["Addresses"]:
+    i = str(i)
+    i = re.sub('; \[','; [[',i)
+    if re.search('; \[',i):
+        elms = re.split('; \[',i)
+        for elm in elms:
+            rlist.append(elm)
+    else:
         #print(i)
-    else:
+        rlist.append(i)
         pass
-        #print(i)
-        names.append(i)
-
-names = sorted(set(names))
-len(names)
-
-names1 = []
-for i in names:
-    if '; ' in i:
-        pass
-        elms = i.split('; ')
-        for j in elms:
-            names1.append(j)
-    else:
-        names1.append(i)
-names1 = sorted(set(names1))
-
-with open(home+'/googleMyDrive/data/MatSci/jusyo_20220711.txt','r') as f:
-    jusyo = f.readlines()
-
-
-def cleanchimei(text,jlist):
-    jlist = jlist
-    text = re.sub(', Japan$', ',', text)
-    for i in jlist:
-        i = re.sub('\n',',',i)
-        i = ',\s*'+i
-        #print(i)
-        #i = ',\s*'+i
-        text = re.sub(i+'$',',',text)
-    return text
-
-
-for n in range(len(names1)):
-    if n == 0:
-        japan = []
-        overseas = []
-    i = names1[n]
-    #print(i)
-    if ', Japan' in i:
-        print(i)
-        i = cleanchimei(i,jusyo)
-        i = cleanchimei(i,jusyo)
-        i = cleanchimei(i,jusyo)
-        i = cleanchimei(i,jusyo)
-        japan.append(i)
-    else:
-        overseas.append(i)
-
-japan = sorted(set(japan))
-len(japan)
-
-
-with open(home+'/googleMyDrive/data/MatSci/kikanmeiKokunai0712.txt','w') as f:
-    for i in japan:
-        print(i)
-        i=i+'\n'
-        f.write(i)
-f.close()
-
-# Addressが空白となっているもの
-df_chk = df_wos[df_wos['Addresses'].isin(['nan'])]
-df_chk.to_excel(home+'/googleMyDrive/data/MatSci/chkAddNan.xlsx')
-
-len(overseas)
-oversear = sorted(set(overseas))
-with open(home+'/googleMyDrive/data/MatSci/kikanmeiKaigai0712.txt','w') as f:
-    for i in overseas:
-        print(i)
-        i=i+'\n'
-        f.write(i)
-f.close()
+rlist = sorted(rlist)
+len(rlist)
+with open(home+'/result/imrPaperResearchers.txt','w') as f:
+    for i in rlist:
+        f.write(i+'\n')
